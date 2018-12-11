@@ -1,0 +1,159 @@
+{% extends 'movies/base.html' %}
+
+
+
+   <!-- safe filter on for raw HTML stored in database -->
+   {% block content %}
+     <header>
+       <div class="row">
+         <div class="col-sm-10">
+           <h2>{{ moviedetail.movie_title | safe }}</h2>
+         </div>
+
+         </div>
+       </div>
+     </header>
+
+	 
+
+     {% if moviedetail.genre.all %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Genre</p>
+         </div>
+         <div class="col-sm-10">
+           <p>
+             {% for genre in moviedetail.genre.all %}</p>
+               {% if genre %}
+
+                     {{ genre }}
+                   {% else %}
+                     <p>nogenre</p>
+				{% endif %}	 
+				{% endfor %}
+       </div>
+	  </div> 
+     {% endif %}
+
+     {% if moviedetail.keyword.all %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Keyword</p>
+         </div>
+         <div class="col-sm-10">
+           <p>
+             {% for keyword in moviedetail.keyword.all %}</p>
+               {% if keyword %}
+
+                     {{ keyword }}
+                   {% else %}
+                     <p>nokeyword</p>
+				{% endif %}	 
+				{% endfor %}
+       </div>
+	  </div> 
+     {% endif %}	 
+	 
+
+     {% if moviedetail.title_year %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Year</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.title_year }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+     {% if moviedetail.color %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Color</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.color }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+    {% if moviedetail.director %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Director</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.director }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+     {% if moviedetail.language %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Language</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.language }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+     {% if moviedetail.country.country_name %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Country</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.country.country_name }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+
+     {% if moviedetail.content_rating.content_rating %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Content-rating</p>
+         </div>
+         <div class="col-sm-10">
+           {{ moviedetail.content_rating.content_rating | safe }}
+         </div>
+       </div>
+     {% endif %}
+
+    {% if moviedetail.imdb_score %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Score</p>
+         </div>
+         <div class="col-sm-10">
+           {{ moviedetail.imdb_score | safe }}
+         </div>
+       </div>
+     {% endif %}
+
+     {% if moviedetail.duration %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Duration</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ moviedetail.duration }} (<span style="font-style:italic">min</span>.)</p>
+         </div>
+       </div>
+     {% endif %}
+
+     {% if moviedetail.movie_imdb_link %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Link</p>
+         </div>
+         <div class="col-sm-4">
+           <p>{{ moviedetail.movie_imdb_link }}</p>
+         </div>
+       </div>
+     {% endif %}
+
+
+   {% endblock content %}

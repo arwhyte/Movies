@@ -1,0 +1,92 @@
+{% extends 'movies/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <header>
+    <h2>New Movie</h2>
+  </header>
+
+  <!-- novalidate attribute required to render validation messages -->
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.movie_title|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.title_year|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.color|as_crispy_field }}
+      </div>
+    </div>
+    <!-- Restore missing fields rendered using Bootstrap rows and columns classes -->
+
+    <div class="row">
+      <div class="col-3">
+        {{ form.genre|as_crispy_field }}
+      </div>
+    </div>	
+	
+    <div class="row">
+      <div class="col-3">
+        {{ form.keyword|as_crispy_field }}
+      </div>
+    </div>		
+
+    <div class="row">
+      <div class="col-3">
+        {{ form.director|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.language|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.country|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.content_rating|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.imdb_score|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.duration|as_crispy_field }}
+      </div>
+    </div>
+	
+    <div class="row">
+      <div class="col-6">
+        {{ form.movie_imdb_link|as_crispy_field }}
+      </div>
+    </div>	
+
+    <button type="submit" class="btn btn-outline-success">Add</button>
+    &nbsp;<a class="btn btn-outline-secondary" href="{% url 'movielist' %}">cancel</a>
+  </form>
+
+{% endblock content %}
