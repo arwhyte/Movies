@@ -144,20 +144,44 @@ class PlotKeyword(models.Model):
         verbose_name_plural = 'Movie keywords'
 
     def __str__(self):
-        return self.keyword        
+        return self.keyword 
+
+'''
+class MovieLanguage(models.Model):
+    language_id = models.AutoField(primary_key=True)
+    language_name = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'movie_language'
+'''
+class MovieLanguage(models.Model):
+    language_id = models.AutoField(primary_key=True)
+    language_name = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'movie_language'
+        ordering = ['language_name']
+        verbose_name = 'Language Name'
+        verbose_name_plural = 'Language Names'
+
+    def __str__(self):
+        return self.language_name
+		
 
 class Movie(models.Model):
     movie_id = models.AutoField(primary_key=True)
-    movie_title = models.CharField(unique=True, max_length=150)
+    movie_title = models.CharField(unique=True, max_length=225)
     title_year = models.IntegerField()  # This field type is a guess.
     imdb_score = models.DecimalField(max_digits=2, decimal_places=1)
     duration = models.IntegerField()
     movie_imdb_link = models.TextField()
-    color = models.ForeignKey(Color, models.DO_NOTHING)
-    director = models.ForeignKey(Director, models.DO_NOTHING)
-    language = models.ForeignKey('MovieLanguage', models.DO_NOTHING)
-    country = models.ForeignKey(Country, models.DO_NOTHING)
-    content_rating = models.ForeignKey(ContentRating, models.DO_NOTHING)
+    color = models.ForeignKey(Color, on_delete=models.PROTECT)
+    director = models.ForeignKey(Director, on_delete=models.PROTECT)
+    language = models.ForeignKey(MovieLanguage, on_delete=models.PROTECT)
+    country = models.ForeignKey(Country, on_delete=models.PROTECT)
+    content_rating = models.ForeignKey(ContentRating, on_delete=models.PROTECT)
     
     genre = models.ManyToManyField(Genre, through='MovieGenres')
     keyword = models.ManyToManyField(PlotKeyword, through='MovieKeywords')
@@ -226,8 +250,8 @@ class MovieGenres(models.Model):
 '''
 class MovieGenres(models.Model):
     movie_genres_id = models.AutoField(primary_key=True)
-    movie = models.ForeignKey(Movie, models.DO_NOTHING)
-    genre = models.ForeignKey(Genre, models.DO_NOTHING)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -249,8 +273,8 @@ class MovieKeywords(models.Model):
 '''
 class MovieKeywords(models.Model):
     movie_keywords_id = models.AutoField(primary_key=True)
-    movie = models.ForeignKey(Movie, models.DO_NOTHING)
-    keyword = models.ForeignKey('PlotKeyword', models.DO_NOTHING)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    keyword = models.ForeignKey(PlotKeyword, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -260,27 +284,6 @@ class MovieKeywords(models.Model):
         verbose_name_plural = 'MovieKeywords'        
 
         
-'''
-class MovieLanguage(models.Model):
-    language_id = models.AutoField(primary_key=True)
-    language_name = models.CharField(unique=True, max_length=100)
 
-    class Meta:
-        managed = False
-        db_table = 'movie_language'
-'''
-class MovieLanguage(models.Model):
-    language_id = models.AutoField(primary_key=True)
-    language_name = models.CharField(unique=True, max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'movie_language'
-        ordering = ['language_name']
-        verbose_name = 'Language Name'
-        verbose_name_plural = 'Language Names'
-
-    def __str__(self):
-        return self.language_name
         
        
