@@ -181,6 +181,39 @@ class Movie(models.Model):
     def get_absolute_url(self):
         return reverse('singlemovie', args=[str(self.pk)])
 
+    @property
+    def movie_genres(self):
+        genres = self.genre.order_by('genre')
+
+        names = []
+        for genre in genres:
+            name = genre.genre
+            if name is None:
+                continue
+
+            genrename = ''.join([name])
+            if genrename not in names:
+                names.append(genrename)
+
+        return ', '.join(names)
+    @property
+    def movie_keywords(self):
+        keywords = self.keyword.order_by('keyword')
+        #print(keywords)
+        names = []
+        for keyword in keywords:
+            name = keyword.keyword
+            if name is None:
+                continue
+
+            keywordname = ''.join([name])
+            #print(keywordname)			
+            if keywordname not in names:
+                names.append(keywordname)
+        print(', '.join(names))
+        return ', '.join(names)
+		
+		
 '''
 class MovieGenres(models.Model):
     movie_genres_id = models.AutoField(primary_key=True)

@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'movies.apps.MoviesConfig',
-	'social_django', 
-	'test_without_migrations',
 	'crispy_forms' ,
+	'django_filters',
+	'social_django', 
+	'test_without_migrations',	
 ]
 
 TEST_RUNNER = 'movies.utils.UnManagedModelTestRunner'

@@ -31,8 +31,11 @@
               <a class="nav-link" href="{% url 'about' %}">about</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'movielist' %}">movies</a>
+            <a class="nav-link" href="{% url 'movielist' %}">moviesList</a>
           </li>
+		  <li class="nav-item">
+            <a class="nav-link" href="{% url 'movie_filter' %}">moviesSesrch</a>
+          </li>		  
           <li class="nav-item">
             <a class="nav-link" href="{% url 'genres' %}">genres</a>
           </li>		
@@ -44,7 +47,7 @@
 
     </nav>
 
-    <main class="px-4 py-3">
+	<main class="px-4 py-3">
       <div class="container-fluid">
 		{% block content %}
 		{% endblock content %}
