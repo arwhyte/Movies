@@ -13,9 +13,9 @@ class ColorSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Color
-		fields = ('color_id', 'color_name')		
-		
-		
+		fields = ('color_id', 'color_name')
+
+
 
 class ContentRatingSerializer(serializers.ModelSerializer):
 
@@ -42,14 +42,14 @@ class GenreSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Genre
-		fields = ('genre_id', 'genre')		
+		fields = ('genre_id', 'genre')
 
 
 class MovieLanguageSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = MovieLanguage
-		fields = ('language_id', 'language_name')	
+		fields = ('language_id', 'language_name')
 
 
 class PlotKeywordSerializer(serializers.ModelSerializer):
@@ -76,17 +76,17 @@ class MovieGenresSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MovieGenres
 		fields = ('movie_id', 'genre_id')
-		
+
 class MovieKeywordsSerializer(serializers.ModelSerializer):
 	movie_id = serializers.ReadOnlyField(source='movie.movie_id')
 	keyword_id = serializers.ReadOnlyField(source='keyword.keyword_id')
 
 	class Meta:
 		model = MovieKeywords
-		fields = ('movie_id', 'keyword_id')		
+		fields = ('movie_id', 'keyword_id')
 
-		
-'''		
+
+'''
 class HeritageSiteSerializer(serializers.ModelSerializer):
 	site_name = serializers.CharField(
 		allow_blank=False,
@@ -253,7 +253,8 @@ class HeritageSiteSerializer(serializers.ModelSerializer):
 					.delete()
 
 		return instance
-'''	
+'''
+#find source in Module Movie table
 class MovieSerializer(serializers.ModelSerializer):
 	movie_title = serializers.CharField(
 		allow_blank=False,
@@ -269,11 +270,11 @@ class MovieSerializer(serializers.ModelSerializer):
 		allow_null=False,
 		max_digits=2,
 		decimal_places=1)
-		
+
 	duration = serializers.IntegerField(
 		allow_null=False
 	)
-	
+
 	color = ColorSerializer(
 		many=False,
 		read_only=True
@@ -308,7 +309,7 @@ class MovieSerializer(serializers.ModelSerializer):
 		write_only=True,
 		queryset=Country.objects.all(),
 		source='country'
-	)	
+	)
 
 	director = DirectorSerializer(
 		many=False,
@@ -320,7 +321,7 @@ class MovieSerializer(serializers.ModelSerializer):
 		write_only=True,
 		queryset=Director.objects.all(),
 		source='director'
-	)	
+	)
 
 
 	language = MovieLanguageSerializer(
@@ -332,9 +333,9 @@ class MovieSerializer(serializers.ModelSerializer):
 		many=False,
 		write_only=True,
 		queryset=MovieLanguage.objects.all(),
-		source='movie_language'
-	)	
-	
+		source='language'#find source in Module Movie table
+	)
+
 	movie_genres = MovieGenresSerializer(
 		source='movie_genres_set', # Note use of _set
 		many=True,
@@ -344,9 +345,9 @@ class MovieSerializer(serializers.ModelSerializer):
 		many=True,
 		write_only=True,
 		queryset=Genre.objects.all(),
-		source='movie_genres'
+		source='genre'
 	)
-	
+
 	movie_keywords = MovieKeywordsSerializer(
 		source='movie_keywords_set', # Note use of _set
 		many=True,
@@ -356,8 +357,8 @@ class MovieSerializer(serializers.ModelSerializer):
 		many=True,
 		write_only=True,
 		queryset=PlotKeyword.objects.all(),
-		source='movie_keywords'
-	)	
+		source='keyword'
+	)
 
 	class Meta:
 		model = Movie
@@ -398,7 +399,8 @@ class MovieSerializer(serializers.ModelSerializer):
 
 		# print(validated_data)
 
-		genres = validated_data.pop('movie_genres')
+		genres = validated_data.pop('genre')
+		keywords = validated_data.pop('keyword')
 		movie = Movie.objects.create(**validated_data)
 
 		if genres is not None:
@@ -407,24 +409,30 @@ class MovieSerializer(serializers.ModelSerializer):
 					movie_id=movie.movie_id,
 					genre_id=genre.genre_id
 				)
-		keywords = validated_data.pop('movie_keywords')
-		movie = Movie.objects.create(**validated_data)
 
 		if keywords is not None:
 			for keyword in keywords:
 				MovieKeywords.objects.create(
 					movie_id=movie.movie_id,
 					keyword_id=keyword.keyword_id
-				)				
+				)
 		return movie
+	'''
+	for keyword in keywords:
+		instance = MovieKeywords.objects.create(
+			movie_id=movie.movie_id
+		)
+		keys = MovieKeywords.objects.filter(keyword_id=keyword.keyword_id)
+		instance.keyword_id.set(keys)
+	'''
 
-		
+
 	def update(self, instance, validated_data):
 		# site_id = validated_data.pop('heritage_site_id')
 		movie_id = instance.movie_id
-		new_genres = validated_data.pop('movie_genres')
-		new_keywords = validated_data.pop('movie_keywords')
-		
+		new_genres = validated_data.pop('genre')
+		new_keywords = validated_data.pop('keyword')
+
 		instance.movie_title = validated_data.get(
 			'movie_title',
 			instance.movie_title
@@ -452,15 +460,15 @@ class MovieSerializer(serializers.ModelSerializer):
 		instance.content_rating_id = validated_data.get(
 			'content_rating_id',
 			instance.content_rating_id
-		)		
+		)
 		instance.country_id = validated_data.get(
 			'country_id',
 			instance.country_id
-		)		
+		)
 		instance.director_id = validated_data.get(
 			'director_id',
 			instance.director_id
-		)		
+		)
 		instance.language_id = validated_data.get(
 			'language_id',
 			instance.language_id
@@ -518,6 +526,6 @@ class MovieSerializer(serializers.ModelSerializer):
 			else:
 				MovieKeywords.objects \
 					.filter(movie_id=movie_id, keyword_id=old_id) \
-					.delete()					
+					.delete()
 
-		return instance	
+		return instance
