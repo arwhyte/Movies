@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'movies',
+        'NAME': 'imdb_movies',
         'USER': 'hhy',
         'OPTIONS': {
             'read_default_file': 'C:\ProgramData\MySQL\MySQL Server 8.0\my.ini',

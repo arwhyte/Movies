@@ -7,6 +7,70 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.urls import reverse
+from django.db.models import F
+
+class CountryArea(models.Model):
+    country_area_id = models.AutoField(primary_key=True)
+    country_area_name = models.CharField(unique=True, max_length=100)
+    m49_code = models.SmallIntegerField()
+    iso_alpha3_code = models.CharField(max_length=3)
+    dev_status = models.ForeignKey('DevStatus', on_delete=models.PROTECT, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'country_area'
+        ordering = ['country_area_name']
+        verbose_name = 'UNSD M49 Country or Area'
+        verbose_name_plural = 'UNSD M49 Countries or Areas'
+
+    def __str__(self):
+        return self.country_area_name
+    def get_absolute_url(self):
+        return reverse('country_detail', args=[str(self.pk)])		
+
+
+'''
+class CountryArea(models.Model):
+    country_area_id = models.AutoField(primary_key=True)
+    country_area_name = models.CharField(unique=True, max_length=100)
+    region = models.ForeignKey('Region', models.DO_NOTHING, blank=True, null=True)
+    sub_region = models.ForeignKey('SubRegion', models.DO_NOTHING, blank=True, null=True)
+    intermediate_region = models.ForeignKey('IntermediateRegion', models.DO_NOTHING, blank=True, null=True)
+    m49_code = models.SmallIntegerField()
+    iso_alpha3_code = models.CharField(max_length=3)
+    dev_status = models.ForeignKey('DevStatus', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'country_area'
+'''
+
+
+class DevStatus(models.Model):
+    dev_status_id = models.AutoField(primary_key=True)
+    dev_status_name = models.CharField(unique=True, max_length=25)
+
+    class Meta:
+        managed = False
+        db_table = 'dev_status'
+        ordering = ['dev_status_name']
+        verbose_name = 'UNSD M49 Country or Area Development Status'
+        verbose_name_plural = 'UNSD M49 Country or Area Development Statuses'
+
+    def __str__(self):
+        return self.dev_status_name
+
+
+'''
+class DevStatus(models.Model):
+    dev_status_id = models.AutoField(primary_key=True)
+    dev_status_name = models.CharField(unique=True, max_length=25)
+
+    class Meta:
+        managed = False
+        db_table = 'dev_status'
+'''
+
 
 '''
 class Color(models.Model):
@@ -180,7 +244,7 @@ class Movie(models.Model):
     color = models.ForeignKey(Color, on_delete=models.PROTECT)
     director = models.ForeignKey(Director, on_delete=models.PROTECT)
     language = models.ForeignKey(MovieLanguage, on_delete=models.PROTECT)
-    country = models.ForeignKey(Country, on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryArea, on_delete=models.PROTECT)
     content_rating = models.ForeignKey(ContentRating, on_delete=models.PROTECT)
     
     genre = models.ManyToManyField(Genre, through='MovieGenres')

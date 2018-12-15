@@ -10,7 +10,7 @@
          </div>
 
          </div>
-       </div>
+
          <div class="col-xs-1">
            {% if user.is_authenticated %}
              &nbsp;<a class="btn btn-outline-warning" href="{% url 'movie_delete' moviedetail.pk %}">delete</a>
@@ -94,13 +94,13 @@
        </div>
      {% endif %}
 
-     {% if moviedetail.country.country_name %}
+     {% if moviedetail %}
        <div class="row">
          <div class="col-sm-2">
            <p>Country</p>
          </div>
          <div class="col-sm-10">
-           <p>{{ moviedetail.country.country_name }}</p>
+           <p>{{ moviedetail.country }}</p>
          </div>
        </div>
      {% endif %}

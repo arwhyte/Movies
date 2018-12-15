@@ -2,35 +2,37 @@
 
 {% block content %}
 
+
+
 <article>
   <header>
     <div class="row">
      <div class="col-sm-1">
         {% if user.is_authenticated %}
-          <a class="btn btn-outline-secondary" href="{% url 'movie_new' %}">new</a>
+          <a class="btn btn-outline-secondary" href="{% url 'country_new' %}">new</a>
        {% endif %}
       </div>
     </div>
   </header>
 {% include 'movies/pagination.html' %}
-  <!-- WARNING: there is no missing code between <nav>...</nav> -->
-<!-- miss the pagination html -->
 
 
-  {% if movies %}
+  {% if countries %}
   <ul>
 
-	{% for movie in movies %}
+	{% for country in countries %}
     <!-- safe filter on for raw HTML stored in database -->
-    <li><a href="{% url 'singlemovie' movie.pk %}">{{ movie.movie_title | safe }}</a></li>
+    <li><a href="{% url 'country_detail' country.pk %}">{{ country.country_area_name | safe }}</li></li>
+	<!--<li>{{ country.m49_code | safe }}</li>-->
 	{% endfor %}
 
   </ul>
   {% else %}
-  <p>No Movies are available to view.</p>
+  <p>No Countries are available to view.</p>
   {% endif %}
 
-  <p>page count: {{ movies.count }}</p>
+  <p>page count: {{ countries.count }}</p>
 </article>
+
 
 {% endblock content %}

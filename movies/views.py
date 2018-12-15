@@ -6,8 +6,10 @@ from .models import Movie
 from .models import Genre
 from .models import MovieGenres
 from .models import MovieKeywords
+from .models import CountryArea
 
 from .forms import MovieForm
+from .forms import CountryAreaForm
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -70,6 +72,21 @@ class GenreDetailView(generic.DetailView):
 	def dispatch(self, *args, **kwargs):
 		return super().dispatch(*args, **kwargs)	
 
+
+class CountryListView(generic.ListView):
+	model = CountryArea
+	context_object_name = 'countries'
+	template_name = 'movies/country_list.html'
+	paginate_by = 30
+	
+	
+	def get_queryset(self):
+		return CountryArea.objects.all()		
+
+class CountryDetailView(generic.DetailView):
+	model = CountryArea
+	context_object_name = 'countrydetail'
+	template_name = 'movies/countrydetail.html'		
 		
 @method_decorator(login_required, name='dispatch')
 class MovieCreateView(generic.View):
@@ -104,6 +121,33 @@ class MovieCreateView(generic.View):
 		form = MovieForm()
 		return render(request, 'movies/movie_new.html', {'form': form})	
 
+@method_decorator(login_required, name='dispatch')
+class CountryCreateView(generic.View):
+	model = CountryArea
+	form_class = CountryAreaForm
+	success_message = "Country created successfully"
+	template_name = 'movies/country_new.html'
+	# fields = '__all__' <-- superseded by form_class
+	# success_url = reverse_lazy('heritagesites/site_list')
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def post(self, request):	
+		form = CountryAreaForm(request.POST)
+		if form.is_valid():	
+			new_country = form.save(commit=False)
+			new_country.save()
+			#print(form.cleaned_data)
+				
+			return redirect(new_country) # shortcut to object's get_absolute_url()
+			# return HttpResponseRedirect(site.get_absolute_url())
+		return render(request, 'movies/country_new.html', {'form': form})
+
+	def get(self, request):
+		form = CountryAreaForm()
+		return render(request, 'movies/country_new.html', {'form': form})		
+		
 		
 @method_decorator(login_required, name='dispatch')
 class MovieUpdateView(generic.UpdateView):
@@ -183,6 +227,29 @@ class MovieUpdateView(generic.UpdateView):
 					.delete()					
 
 		return HttpResponseRedirect(movie.get_absolute_url())
+		#return redirect('heritagesites/sites/', pk=site.pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class CountryUpdateView(generic.UpdateView):
+	model = CountryArea
+	form_class = CountryAreaForm
+	# fields = '__all__' <-- superseded by form_class
+	context_object_name = 'countrydetail'
+	# pk_url_kwarg = 'site_pk'
+	success_message = "Country updated successfully"
+	template_name = 'movies/country_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		country = form.save(commit=False)
+		# site.updated_by = self.request.user
+		# site.date_updated = timezone.now()
+		country.save()				
+
+		return HttpResponseRedirect(country.get_absolute_url())
 		#return redirect('heritagesites/sites/', pk=site.pk)		
 		
 		
@@ -210,7 +277,26 @@ class MovieDeleteView(generic.DeleteView):
 
 		self.object.delete()
 
-		return HttpResponseRedirect(self.get_success_url())		
+		return HttpResponseRedirect(self.get_success_url())	
+
+@method_decorator(login_required, name='dispatch')
+class CountryDeleteView(generic.DeleteView):
+	model = CountryArea
+	success_message = "Country deleted successfully"
+	success_url = reverse_lazy('countries')
+	context_object_name = 'countrydetail'
+	template_name = 'movies/country_delete.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		self.object = self.get_object()
+			
+
+		self.object.delete()
+
+		return HttpResponseRedirect(self.get_success_url())			
 
 class MovieFilterView(FilterView):
 	filterset_class = MovieFilter

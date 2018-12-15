@@ -12,6 +12,17 @@
          </div>
        </div>
      </header>
+	  {% if genredetail.genre %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Name:</p>
+         </div>
+         <div class="col-sm-10">
+           <p>
+             {{ genredetail.genre }}</p>
+       </div>
+	  </div> 
+     {% endif %}
 
 	 
 
