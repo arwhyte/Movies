@@ -64,17 +64,7 @@ class MovieFilter(django_filters.FilterSet):
 		lookup_expr='exact'
 	)
 
-	imdb_score = django_filters.CharFilter(
-		field_name='imdb_score',
-		label='Imdb_score',
-		lookup_expr='icontains'
-	)
 
-	duration = django_filters.CharFilter(
-		field_name='duration',
-		label='Duration',
-		lookup_expr='icontains'
-	)
 		
 
 
