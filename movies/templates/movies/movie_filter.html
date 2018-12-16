@@ -31,15 +31,7 @@
         {% if movie.movie_genres %}
               <p>genre: {{ movie.movie_genres | safe }}</p>
         {% endif %}
-        {% if movie.title_year %}
-        <!--  <div class="row">
 
-            <div class="col-sm-10">-->
-              {{ movie.title_year | safe }}
-              <!-- <p>{{ site.description | safe }}</p> -->
-         <!--   </div>
-          </div>-->
-        {% endif %}
         {% if movie.director_name %}
               {{ movie.director_name | safe }}
               <!-- <p>{{ site.description | safe }}</p> -->

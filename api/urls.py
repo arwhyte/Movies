@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import SimpleRouter
 from rest_framework_swagger.views import get_swagger_view
-from api.views import MovieViewSet
+from api.views import MovieViewSet, CountryViewSet
 
 API_TITLE = 'movies API'
 API_DESC = 'A web API for creating, modifying and deleting Movies.'
@@ -25,6 +25,7 @@ schema_view = get_schema_view(
 
 router = SimpleRouter()
 router.register(r'movies', MovieViewSet, base_name='movies')
+router.register(r'countries', CountryViewSet, base_name='countries')
 # urlpatterns = router.urls
 
 # The API URLs are now determined automatically by the router.
@@ -34,4 +35,14 @@ urlpatterns = [
 	path('swagger-docs/', schema_view)
 	# path('schema/', schema_view)
 ]
+
+
+
+
+
+
+
+
+
+
 

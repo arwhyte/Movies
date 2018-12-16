@@ -10,7 +10,7 @@ class MovieFilter(django_filters.FilterSet):
 		lookup_expr='icontains'
 	)
 
-	year = django_filters.CharFilter(
+	year = django_filters.NumberFilter(
 		field_name='title_year',
 		label='Year',
 		lookup_expr='icontains'

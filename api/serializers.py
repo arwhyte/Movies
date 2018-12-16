@@ -30,13 +30,82 @@ class DevStatusSerializer(serializers.ModelSerializer):
 		fields = ('dev_status_id', 'dev_status_name')
 		
 class CountryAreaSerializer(serializers.ModelSerializer):
-	dev_status = DevStatusSerializer(many=False, read_only=True)
+	#dev_status = DevStatusSerializer(many=False, read_only=True)
 
 	class Meta:
 		model = CountryArea
-		fields = ('country_area_id', 'country_area_name','m49_code','iso_alpha3_code','dev_status',)
+		fields = ('country_area_id', 'country_area_name')
+
+class CountrySerializer(serializers.ModelSerializer):
+	country_area_name = serializers.CharField(
+		allow_blank=False,
+		max_length=255
+	)
+
+	m49_code = serializers.CharField(
+		allow_blank=False,
+		max_length=255
+	)
+	
+	iso_alpha3_code = serializers.CharField(
+		allow_blank=False,
+		max_length=255
+	) 
+
+	dev_status = DevStatusSerializer(
+		many=False,
+		read_only=True
+	)
+	dev_status_id = serializers.PrimaryKeyRelatedField(
+		allow_null=False,
+		many=False,
+		write_only=True,
+		queryset=DevStatus.objects.all(),
+		source='dev_status'
+	)
+	class Meta:
+		model = CountryArea
+		fields = (
+			'country_area_id',
+			'country_area_name',
+			'm49_code',
+			'iso_alpha3_code',
+			'dev_status_id',
+			'dev_status',			
+		)
+	def create(self, validated_data):
+
+		#print(validated_data)
+
+		country = CountryArea.objects.create(**validated_data)
 
 
+		return country	
+		
+	def update(self, instance, validated_data):
+		country_area_id = instance.country_area_id	
+		print(validated_data)
+		country_area_id = instance.country_area_id
+	
+		
+		instance.country_area_name = validated_data.get(
+			'country_area_name',
+			instance.country_area_name
+		)
+		instance.m49_code = validated_data.get(
+			'm49_code',
+			instance.m49_code
+		)	
+		instance.iso_alpha3_code = validated_data.get(
+			'iso_alpha3_code',
+			instance.iso_alpha3_code
+		)	
+		instance.dev_status = validated_data.get(
+			'dev_status',
+			instance.dev_status
+		)			
+		instance.save()
+		return instance
 class DirectorSerializer(serializers.ModelSerializer):
 
 	class Meta:
