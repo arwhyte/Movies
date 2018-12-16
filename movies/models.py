@@ -118,28 +118,7 @@ class ContentRating(models.Model):
     def __str__(self):
         return self.content_rating
         
-'''
-class Country(models.Model):
-    country_id = models.AutoField(primary_key=True)
-    country_name = models.CharField(unique=True, max_length=100)
 
-    class Meta:
-        managed = False
-        db_table = 'country'
-'''
-class Country(models.Model):
-    country_id = models.AutoField(primary_key=True)
-    country_name = models.CharField(unique=True, max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'country'
-        ordering = ['country_name']
-        verbose_name = 'Movie country_name'
-        verbose_name_plural = 'Movie country_names'    
-
-    def __str__(self):
-        return self.country_name
         
 '''
 class Director(models.Model):
@@ -244,7 +223,7 @@ class Movie(models.Model):
     color = models.ForeignKey(Color, on_delete=models.PROTECT)
     director = models.ForeignKey(Director, on_delete=models.PROTECT)
     language = models.ForeignKey(MovieLanguage, on_delete=models.PROTECT)
-    country = models.ForeignKey(CountryArea, on_delete=models.PROTECT)
+    country_area = models.ForeignKey(CountryArea, on_delete=models.PROTECT)
     content_rating = models.ForeignKey(ContentRating, on_delete=models.PROTECT)
     
     genre = models.ManyToManyField(Genre, through='MovieGenres')

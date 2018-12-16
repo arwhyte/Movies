@@ -6,7 +6,7 @@
      <header>
        <div class="row">
          <div class="col-sm-10">
-           <h2>{{ moviedetail.movie_title | safe }}</h2>
+           <h2>{{ moviedetail.movie_title | safe }}{{ moviedetail.movie_id | safe }}</h2>
          </div>
 
          </div>
@@ -100,7 +100,7 @@
            <p>Country</p>
          </div>
          <div class="col-sm-10">
-           <p>{{ moviedetail.country }}</p>
+           <p>{{ moviedetail.country_area }}</p>
          </div>
        </div>
      {% endif %}

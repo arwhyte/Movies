@@ -93,7 +93,7 @@ class MovieAdmin(admin.ModelAdmin):
 		'color',
 		'director',
 		'language',
-		'country',
+		'country_area',
 		'content_rating',
 		'genre',
 		'keyword'
@@ -108,7 +108,7 @@ class MovieAdmin(admin.ModelAdmin):
 			'color',
 			'director',
 			'language',
-			'country',
+			'country_area',
 			'content_rating',
 	]
 
@@ -125,13 +125,43 @@ class ContentRatingAdmin(admin.ModelAdmin):
 # admin.site.register(models.HeritageSiteCategory)
 
 
-@admin.register(models.Country)
-class CountryAdmin(admin.ModelAdmin):
-	fields = ['country_name']
-	list_display = ['country_name']
-	ordering = ['country_name']
+@admin.register(models.CountryArea)
+class CountryAreaAdmin(admin.ModelAdmin):
+	fields = [
+		'country_area_name',
+		#(
+		#	'region',
+		#	'sub_region',
+		#	'intermediate_region'
+		#),
+		'iso_alpha3_code',
+		'location',
+		'm49_code',
+		'dev_status'
+	]
 
-# admin.site.register(models.IntermediateRegion)
+	list_display = [
+		'country_area_name',
+		#'region',
+		#'sub_region',
+		#'intermediate_region',
+		'iso_alpha3_code',
+		'm49_code',
+		'dev_status'
+	]
+
+	#list_filter = ['region', 'sub_region', 'intermediate_region', 'dev_status']
+	list_filter = ['dev_status']
+# admin.site.register(models.CountryArea)
+
+
+@admin.register(models.DevStatus)
+class DevStatusAdmin(admin.ModelAdmin):
+	fields = ['dev_status_name']
+	list_display = ['dev_status_name']
+	ordering = ['dev_status_name']
+
+# admin.site.register(models.DevStatus)
 
 
 @admin.register(models.Director)

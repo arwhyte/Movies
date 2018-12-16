@@ -1,6 +1,6 @@
 import django_filters
 from movies.models import Movie, Director, Color, \
-	Genre, PlotKeyword, MovieLanguage, Country, ContentRating
+	Genre, PlotKeyword, MovieLanguage, CountryArea, ContentRating
 
 
 class MovieFilter(django_filters.FilterSet):
@@ -51,10 +51,10 @@ class MovieFilter(django_filters.FilterSet):
 		lookup_expr='exact'
 	)
 
-	country = django_filters.ModelChoiceFilter(
-		field_name='country',
+	country_area = django_filters.ModelChoiceFilter(
+		field_name='country_area',
 		label='Country',
-		queryset=Country.objects.all().order_by('country_name'),
+		queryset=CountryArea.objects.all().order_by('country_area_name'),
 		lookup_expr='exact'
 	)
 	content_rating = django_filters.ModelChoiceFilter(
